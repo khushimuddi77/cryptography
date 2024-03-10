@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Encryption and Decryption</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Image Encryption and Decryption</h1>
+    <div>
+        <input type="file" id="fileInput">
+        <button onclick="uploadImage()">Upload Image</button>
+    </div>
+    <div>
+        <textarea id="imageTextarea" placeholder="Paste Image URL or Base64 Data"></textarea>
+        <button onclick="pasteImage()">Paste Image</button>
+    </div>
+    <div>
+        <button onclick="encryptImage()">Encrypt</button>
+        <button onclick="decryptImage()">Decrypt</button>
+    </div>
+    <div id="imageContainer">
+        <h2>Original Image</h2>
+        <img id="originalImage">
+        <h2>Ciphered Image</h2>
+        <img id="cipheredImage">
+        <h2>Decrypted Image</h2>
+        <img id="decryptedImage">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
