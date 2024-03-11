@@ -4,31 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Encryption and Decryption</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
 </head>
 <body>
     <h1>Image Encryption and Decryption</h1>
     <div>
-        <input type="file" id="fileInput">
+        <!-- Choose Image button -->
+        <input type="file" id="fileInput" style="display: none;">
+        <button onclick="chooseImage()">Choose Image</button>
         <button onclick="uploadImage()">Upload Image</button>
     </div>
-    <div>
+    <!-- <div>
         <textarea id="imageTextarea" placeholder="Paste Image URL or Base64 Data"></textarea>
         <button onclick="pasteImage()">Paste Image</button>
-    </div>
+    </div> -->
     <div>
         <button onclick="encryptImage()">Encrypt</button>
         <button onclick="decryptImage()">Decrypt</button>
     </div>
     <div id="imageContainer">
         <h2>Original Image</h2>
-        <img id="originalImage">
+        <div id="originalImageContainer">
+            <img id="originalImage">
+        </div>
         <h2>Ciphered Image</h2>
-        <img id="cipheredImage">
+        <div id="encryptedImageContainer">
+            <img id="encryptedImage">
+        </div>
         <h2>Decrypted Image</h2>
-        <img id="decryptedImage">
+        <div id="decryptedImageContainer">
+            <img id="decryptedImage">
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
 </body>
 </html>
