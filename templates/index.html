@@ -8,30 +8,41 @@
 </head>
 <body>
     <h1>Image Encryption and Decryption</h1>
+    <h2>Implemented By:</h2> 
+    <h3>Khushi Suresh Muddi - 211IT032</h3>
+    <h3>Shikha Reji - 211IT061</h3>
+    <h3>Shreya Suresh Jindrali - 211IT064</h3>
     <div>
-        <!-- Choose Image button -->
         <input type="file" id="fileInput" style="display: none;">
         <button onclick="chooseImage()">Choose Image</button>
-        <button onclick="uploadImage()">Upload Image</button>
+        <button onclick="uploadImage()">Click to Start the Process</button>
     </div>
     <!-- <div>
         <textarea id="imageTextarea" placeholder="Paste Image URL or Base64 Data"></textarea>
         <button onclick="pasteImage()">Paste Image</button>
     </div> -->
-    <div>
-        <button onclick="encryptImage()">Encrypt</button>
-        <button onclick="decryptImage()">Decrypt</button>
-    </div>
+    <!-- <div> 
+        <button id="encryptButton" onclick="encryptImage()" disabled>Encrypt</button>
+        <button id="decryptButton" onclick="decryptImage()" disabled>Decrypt</button>
+        <button onclick="resetImage()">Reset</button> 
+    </div> -->
+    <div id="imageHeadingContainer">
+        <div class="title">
+        <h2>Original Image</h2></div>
+       
+        <div class="title"><h2>Ciphered Image</h2></div>
+        
+        <div class="title"><h2>Decrypted Image</h2></div>
+        
+    </div >
+
     <div id="imageContainer">
-        <h2>Original Image</h2>
         <div id="originalImageContainer">
             <img id="originalImage">
         </div>
-        <h2>Ciphered Image</h2>
         <div id="encryptedImageContainer">
             <img id="encryptedImage">
         </div>
-        <h2>Decrypted Image</h2>
         <div id="decryptedImageContainer">
             <img id="decryptedImage">
         </div>

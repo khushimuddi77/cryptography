@@ -11,9 +11,6 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-import math
-import numpy as np
-
 def rotate_matrix_180(matrix):
     reversed_matrix = [row[::-1] for row in matrix[::-1]]
     return reversed_matrix
@@ -119,11 +116,9 @@ def plaintext_scrambling(B):
 
     for i in range(M):
         for j in range(N):
-            # Calculate the sums of the i-th row and j-th column
             Ri = np.sum(B[i, :]) - B[i, j]
             Hj = np.sum(B[:, j]) - B[i, j]
 
-            # Calculate the new coordinates (m, n)
             if j % 2 == 0:
                 m = (Hj % M)
                 n = (Ri % N)
@@ -132,10 +127,8 @@ def plaintext_scrambling(B):
                 n = N - (Ri % N)-1
             m=int(m)
             n=int(n)
-            # Check if the calculated m or n is equal to i or j
             if m== i and n == j:
                 print("hello")
-                # Swap B(i, j) and B(m, n)
                 D[i, j], D[m, n] = D[m, n], D[i, j]
 
     return D
@@ -145,7 +138,7 @@ def backward_diffusion_algorithm(E, Z):
     M = len(E)
     N = len(E[0]) 
     F = [[0] * N for _ in range(M)]
-    i, j = 0, 0  # Start indices from 0, 0
+    i, j = 0, 0 
 
     while i < M:
         while j < N:
@@ -179,6 +172,20 @@ if not os.path.exists(UPLOAD_FOLDER):
 def save_image(image, filename):
     image.save(os.path.join(filename))
 
+def convert_to_black_and_white(image_path):
+    try:
+        image = Image.open(image_path)
+
+        bw_image = image.convert('L')
+
+        output_image_path = os.path.join(UPLOAD_FOLDER, 'black_and_white.jpg')
+        bw_image.save(output_image_path)
+
+        return output_image_path
+    except Exception as e:
+        print(f"Error converting image to black and white: {e}")
+        return None
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'image' not in request.files:
@@ -186,53 +193,53 @@ def upload():
 
     image_file = request.files['image']
 
-    # Check if the file is empty
     if image_file.filename == '':
         return jsonify({'error': 'Empty file'})
-
-    # Save the uploaded image to a temporary location
     uploaded_image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
-    with open("uploaded_image_path.txt", "w") as file:
-        file.write(uploaded_image_path)
     image_file.save(uploaded_image_path)
-
-    # Return the path to the uploaded image
-    return jsonify({'success': True, 'message': 'Image uploaded successfully', 'image_path': uploaded_image_path})
-
+    black_and_white_image_path = convert_to_black_and_white(uploaded_image_path)
+    with open("uploaded_image_path.txt", "w") as file:
+            file.write(black_and_white_image_path)
+    
+    if black_and_white_image_path:
+        return jsonify({'success': True, 'message': 'Image uploaded and converted to black and white successfully', 'image_path': black_and_white_image_path})
+    else:
+        return jsonify({'error': 'Failed to convert image to black and white'})
 
 @app.route('/encrypt', methods=['POST'])
 def encrypt():
-    # Check if the image path is provided in the request
-   
-    #     uploaded_image_path = request.json['image_path']
-    #     return jsonify({'success':True,'message':'Image found','image_path':uploaded_image_path})
 
-    # Retrieve the uploaded image path from the request
-
-# Read the image path from the file
     with open("uploaded_image_path.txt", "r") as file:
         uploaded_image_path = file.read()
+    image = Image.open(uploaded_image_path)
+    image = image.convert('L')
 
-# Now you can use uploaded_image_path as needed
+    pixel_values = np.array(image)
+    P = np.vstack(pixel_values)
 
-    
+    print(P)
+    print(P.shape)
 
-    # Read the uploaded image data
-    image_data = Image.open(uploaded_image_path)
 
-    # Implement your encryption logic here
-    # For example, open the image using PIL (Python Imaging Library)
+    print("Image format:", image.format)
+    print("Image mode:", image.mode)
+    print("Image size:", image.size)
+    M, N = image.size
+    if M % 2 != 0:
+        M += 1
+    if N % 2 != 0:
+        N += 1
+    image = image.resize((M, N))
+
+    M=image.size[0]
+    N = image.size[1]
+
     try:
-        # Optionally, you can convert the image to grayscale
-
-        # Convert the image to grayscale (optional)
-        image_data = image_data.convert('L')
-
-        # Get pixel values as a NumPy array
-        pixel_values = np.array(image_data)
-        P = np.vstack(pixel_values)
-        M = image_data.size[0]
-        N = image_data.size[1]
+        M = len(P)
+        N = len(P[0])
+        print(P)
+        print(M)
+        print(N)
         secret_key = 'FEDCBA98765432100123456789ABCDEF02468ACE13579BDFF0E1D2C3B4A59687'
         X=main(secret_key,M,N)
         Z=rotate_matrix_180(X)
@@ -250,28 +257,17 @@ def encrypt():
         C=np.array(C).reshape(M,N)
         print(C)
         np.save("C_matrix.npy", C)
-
         image = Image.fromarray(C.astype('uint8'))
-        
-        image.save('static/uploads/output_image11.jpg')
-        image.show()
-        print(image)
-
-        print("done")
-
+        print(image.size)
+        output_image_path = 'static/uploads/output_image11.jpg'
+        image.save(output_image_path)
         encrypted_image_path = os.path.join(UPLOAD_FOLDER, 'output_image11.jpg')
-      
-
-        # Return the path to the encrypted image
         return jsonify({'success': True, 'message': 'Image encrypted successfully', 'encrypted_image_path': encrypted_image_path})
     except Exception as e:
         return jsonify({'error': str(e)})
 
 @app.route('/decrypt', methods=['POST'])
 def decrypt():
-    # Check if the image path is provided in the request
-
-    # Retrieve the encrypted image path from the request
     C = np.load("C_matrix.npy")
     print("gg")
     try:
@@ -282,34 +278,26 @@ def decrypt():
         X=main(secret_key,M,N)
         Z=rotate_matrix_180(X)
         Z = np.array(Z)
-        print("part1")
         A_d=forward_diffusion_algorithm(C, X)
         B_d=rotate_matrix_180(A_d)
-        print("part2")
         B_d = np.array(B_d)
         D_d=plaintext_scrambling(B_d)
-        print("part3")
         D_d=np.array(D_d)
         E_d=rotate_matrix_180(D_d)
         E_d=np.array(E_d)
-        print("part2")
         F_d=backward_diffusion_algorithm(E_d, Z)
         F_d=np.array(F_d).reshape(M,N)
         P_dec=rotate_matrix_180(F_d)
         P_dec=np.array(P_dec)
-        print("done")
         image = Image.fromarray(P_dec.astype('uint8'))
         
         image.save('static/uploads/output_image12.jpg')
-        image.show()
+        # image.show()
         print(image)
 
         print("done")
 
         decrypted_image_path = os.path.join(UPLOAD_FOLDER, 'output_image12.jpg')
-      
-
-        # Return the path to the encrypted image
         return jsonify({'success': True, 'message': 'Image encrypted successfully', 'decrypted_image_path': decrypted_image_path})
     except Exception as e:
         return jsonify({'error': str(e)})

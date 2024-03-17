@@ -1,12 +1,17 @@
 body {
+    text-align: center; 
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+}
+
+h1, h2, h3 {
+    margin: 10px 0; 
 }
 
 h1 {
     text-align: center;
     margin-top: 20px;
+    color: #007bff;
+    font-weight: 900;
 }
 
 div {
@@ -37,55 +42,62 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Style for image container */
-/* Style for image container */
-/* Style for image container */
+
 #imageContainer {
-    margin-top: 20px;
-    display: flex; /* Use flexbox layout */
-    flex-direction: row; /* Arrange items vertically */
+    display: flex; 
+    justify-content:space-evenly; 
+    align-items: center; 
+    margin-left: 50px;
+
 }
 
-/* Style for image headings */
+#imageContainer > div {
+    flex: 1; 
+    text-align: center;
+}
+
+#imageContainer img {
+    max-width: 100%; 
+    height: auto; 
+}
+#imageHeadingContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around; 
+    flex-direction: row;
+}
+
 h2 {
-    margin-top: 20px;
+    font-weight:100;
+    margin-top: 15px;
 }
 
-/* Style for image containers */
-.imageContainerItem {
-    margin-top: 10px;
-}
-
-/* Style for images */
 img {
-    max-width: 100%; /* Ensure images don't exceed container width */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Ensure images appear on their own line */
+    max-width: 100%; 
+    height: auto;
+    display: block; 
 }
 
 
-/* Style for images */
 img {
-    max-width: 100%; /* Ensure images don't exceed container width */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Ensure images appear on their own line */
+    max-width: 100%; 
+    height: auto; 
+    display: block; 
 }
 
-/* Style for image headings */
-h2 {
-    margin-top: 20px;
+h3{
+    font-weight: 800;
+    margin-top: 5px;
 }
 
-/* Style for image containers */
 #originalImageContainer,
 #encryptedImageContainer,
 #decryptedImageContainer {
     margin-top: 10px;
 }
 
-/* Style for images */
 img {
-    max-width: 100%; /* Ensure images don't exceed container width */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Ensure images appear on their own line */
+    max-width: 100%; 
+    height: auto; 
+    display: block; 
 }
